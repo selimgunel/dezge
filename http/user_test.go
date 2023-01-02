@@ -8,14 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const httpPort = ":8888"
-
-func BasicEngine() http.Handler {
-	s := NewServer(httpPort, nil)
-	return s.server.Handler
-
-}
-func TestBasicPing(t *testing.T) {
+func TestBasicRegister(t *testing.T) {
 	r := gofight.New()
 
 	r.GET("/ping").
