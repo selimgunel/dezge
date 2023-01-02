@@ -17,13 +17,13 @@ func (s *Server) subscribePositionSVG(c *gin.Context) {
 
 	id := c.Query("id")
 
-	uid, err := strconv.ParseUint(id, 10, 64)
+	uid, err := strconv.ParseInt(id, 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "uid is not a valid number"})
 		return
 	}
 	var u dezge.User
-	u.ID = uid
+	u.ID = int(uid)
 	u.Name = "none"
 
 	ctx := dezge.NewContextWithUser(c, &u)

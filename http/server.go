@@ -18,7 +18,6 @@ type Server struct {
 
 	stat              *expvar.Map
 	EventService      dezge.EventService
-	GeneratorService  dezge.GeneratorService
 	EngineInfoService dezge.EngineInfoService
 
 	Addr   string

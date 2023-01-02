@@ -67,7 +67,7 @@ func (s *Server) handleEvent(c *gin.Context) {
 		return
 	}
 	var u dezge.User
-	u.ID = uid
+	u.ID = int(uid)
 	u.Name = "none"
 
 	ctx := dezge.NewContextWithUser(c, &u)
@@ -125,7 +125,7 @@ func (s *Server) handleEventRandomUser(c *gin.Context) {
 
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
-	u.ID = r1.Uint64()
+	u.ID = r1.Int()
 	u.Name = fmt.Sprintf("no-name: %d", u.ID)
 
 	ctx := dezge.NewContextWithUser(c, &u)
