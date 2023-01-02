@@ -61,11 +61,10 @@ func NewEngineInfo(path string) *EngineInfo {
 
 func (e *EngineInfo) Validate() error {
 	//check if the engine binary exists.
-	fst, err := os.Stat(e.Path)
+	_, err := os.Stat(e.Path)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%+v\n", fst)
 	eng, err := uci.NewEngine(e.Path)
 	if err != nil {
 		return err
@@ -78,7 +77,6 @@ func (e *EngineInfo) Validate() error {
 	for k, v := range options {
 		e.Options[k] = v
 	}
-	fmt.Println(options)
 	id, ok := options["id"]
 	if !ok {
 		return fmt.Errorf("engine id is not found")

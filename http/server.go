@@ -96,6 +96,14 @@ func NewServer(addr string, stat *expvar.Map) *Server {
 		s.ListEngines(c)
 	})
 
+	router.GET("/signup", func(c *gin.Context) {
+		s.Register(c)
+	})
+
+	router.GET("/signin", func(c *gin.Context) {
+		s.Login(c)
+	})
+
 	return s
 }
 

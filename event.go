@@ -19,7 +19,7 @@ type Subscription interface {
 }
 
 type EventService interface {
-	PublishEvent(uint64, Event)
+	PublishEvent(int, Event)
 	Subscribe(ctx context.Context) (Subscription, error)
 	LenSubs() int
 }

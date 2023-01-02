@@ -13,6 +13,7 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/narslan/dezge"
 )
 
 //go:embed migration/*.sql
@@ -221,4 +222,19 @@ func FormatLimitOffset(limit, offset int) string {
 		return fmt.Sprintf(`OFFSET %d`, offset)
 	}
 	return ""
+}
+
+// FormatError returns err as a WTF error, if possible.
+// Otherwise returns the original error.
+func FormatError(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	switch err.Error() {
+	case "UNIQUE constraint failed: dial_memberships.dial_id, dial_memberships.user_id":
+		return dezge.Errorf(dezge.ECONFLICT, "Dial membership already exists.")
+	default:
+		return err
+	}
 }

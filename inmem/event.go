@@ -16,13 +16,13 @@ var _ dezge.EventService = (*EventService)(nil)
 // EventService represents a service for managing events in the system.
 type EventService struct {
 	mu sync.Mutex
-	m  map[uint64]map[*Subscription]struct{} // subscriptions by user ID
+	m  map[int]map[*Subscription]struct{} // subscriptions by user ID
 }
 
 // NewEventService returns a new instance of EventService.
 func NewEventService() *EventService {
 	return &EventService{
-		m: make(map[uint64]map[*Subscription]struct{}),
+		m: make(map[int]map[*Subscription]struct{}),
 	}
 }
 
@@ -30,7 +30,7 @@ func NewEventService() *EventService {
 //
 // If user's channel is full then the user is disconnected. This is to prevent
 // slow users from blocking progress.
-func (s *EventService) PublishEvent(userID uint64, event dezge.Event) {
+func (s *EventService) PublishEvent(userID int, event dezge.Event) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -118,7 +118,7 @@ var _ dezge.Subscription = (*Subscription)(nil)
 // Subscription represents a stream of user-related events.
 type Subscription struct {
 	service *EventService // service subscription was created from
-	userID  uint64        // subscribed user
+	userID  int           // subscribed user
 
 	c    chan dezge.Event // channel of events
 	once sync.Once        // ensures c only closed once
