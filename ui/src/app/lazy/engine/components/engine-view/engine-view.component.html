@@ -1,0 +1,18 @@
+<table class="shadow-lg bg-white border-collapse" *ngIf="engines">
+  <thead>
+    <tr>
+       <th class="bg-blue-100 border text-left px-8 py-4">ID</th>
+    
+       <th class="bg-blue-100 border text-left px-8 py-4">Path</th>
+       <th class="bg-blue-100 border text-left px-8 py-4">Engine ID</th>
+    </tr>
+  </thead>
+  <tbody class="bg-blue dark:bg-slate-800">
+    <tr *ngFor="let engine of engines">
+      <td class="border px-8 py-4">{{ engine.id }}</td>
+     
+      <td class="border px-8 py-4">{{ engine.path }}</td>
+      <td class="border px-8 py-4">{{ engine.engine_id }}</td>
+    </tr>
+  </tbody>
+</table>
