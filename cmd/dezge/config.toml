@@ -1,0 +1,7 @@
+[db]
+dsn="test.db"
+[http]
+addr=":8080"
+key="keys/key.pem"
+cert="keys/cert.pem"
+domain="localhost"
