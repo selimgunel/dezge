@@ -10,7 +10,6 @@ import (
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 	"github.com/narslan/dezge"
-	"github.com/rs/zerolog/log"
 )
 
 func (s *Server) subscribePositionSVG(c *gin.Context) {
@@ -34,8 +33,6 @@ func (s *Server) subscribePositionSVG(c *gin.Context) {
 	}
 
 	defer sub.Close()
-
-	log.Debug().Msgf("ID: %d Name: %s", u.ID, u.Name)
 
 	conn, _, _, err := ws.UpgradeHTTP(c.Request, c.Writer)
 	if err != nil {
@@ -72,40 +69,4 @@ func (s *Server) subscribePositionSVG(c *gin.Context) {
 		}
 
 	}
-}
-
-func (s *Server) publishPositionSVG(c *gin.Context) {
-	// if s.EventService.LenSubs() == 0 {
-	// 	c.JSON(http.StatusNotAcceptable, gin.H{"error": "no subscribers"})
-	// 	return
-	// }
-
-	// var u dezge.User
-
-	// if err := c.ShouldBindJSON(&u); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
-
-	// var b strings.Builder
-
-	// // create board position
-	// fenStr := "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1"
-	// pos := &chess.Position{}
-	// if err := pos.UnmarshalText([]byte(fenStr)); err != nil {
-	// 	log.Fatal().Msg("")
-	// }
-
-	// // write board SVG to file
-	// yellow := color.RGBA{255, 255, 0, 1}
-	// mark := chessimg.MarkSquares(yellow, chess.D2, chess.D4)
-	// if err := chessimg.SVG(&b, pos.Board(), mark); err != nil {
-	// 	log.Fatal().Msg("")
-	// }
-	// var ev dezge.Event
-	// ev.Type = "PGNSVG"
-	// ev.Payload = b.String()
-
-	// s.EventService.PublishEvent(u.ID, ev)
-
 }

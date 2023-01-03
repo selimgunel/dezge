@@ -3,13 +3,13 @@ package http
 import (
 	"context"
 	"expvar"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/narslan/dezge"
-	"github.com/rs/zerolog/log"
 )
 
 // Server represents an HTTP server.
@@ -87,10 +87,6 @@ func NewServer(addr string, stat *expvar.Map) *Server {
 		s.subscribePositionSVG(c)
 	})
 
-	router.POST("/chess/board/publish", func(c *gin.Context) {
-		s.publishPositionSVG(c)
-	})
-
 	router.GET("/engines", func(c *gin.Context) {
 		s.ListEngines(c)
 	})
@@ -108,17 +104,17 @@ func NewServer(addr string, stat *expvar.Map) *Server {
 
 func (s *Server) Open(ctx context.Context) (err error) {
 
-	log.Debug().Msgf("addr: %+v", s.server.Addr)
+	log.Printf("addr: %+v", s.server.Addr)
 	go func() {
 		if err = s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatal().Msgf("listen:%+s\n", err)
+			log.Fatalf("listen:%+s\n", err)
 		}
 	}()
 
-	log.Info().Msg("server started")
+	//log.Info().Msg("server started")
 	<-ctx.Done()
 
-	log.Info().Msg("server stoped")
+	//log.Info().Msg("server stoped")
 
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer func() {
@@ -126,10 +122,11 @@ func (s *Server) Open(ctx context.Context) (err error) {
 	}()
 
 	if err = s.server.Shutdown(ctxShutDown); err != nil {
-		log.Fatal().Err(err).Msg("server Shutdown Failed:")
+		log.Fatalf("listen:%+s\n", err)
+		//log.Fatal().Err(err).Msg("server Shutdown Failed:")
 	}
 
-	log.Info().Msg("server exited properly")
+	//log.Info().Msg("server exited properly")
 
 	if err == http.ErrServerClosed {
 		err = nil
@@ -148,7 +145,8 @@ func initCors() gin.HandlerFunc {
 	}
 	err := config.Validate()
 	if err != nil {
-		log.Fatal().Msg("")
+		log.Fatalf("listen:%+s\n", err)
+
 	}
 	return cors.New(config)
 }

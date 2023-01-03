@@ -15,7 +15,6 @@ import (
 	"github.com/gobwas/ws/wsutil"
 	"github.com/narslan/dezge"
 
-	"github.com/rs/zerolog/log"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -79,8 +78,6 @@ func (s *Server) handleEvent(c *gin.Context) {
 
 	defer sub.Close()
 
-	log.Debug().Msgf("ID: %d Name: %s", u.ID, u.Name)
-
 	conn, _, _, err := ws.UpgradeHTTP(c.Request, c.Writer)
 	if err != nil {
 
@@ -136,8 +133,6 @@ func (s *Server) handleEventRandomUser(c *gin.Context) {
 	}
 
 	defer sub.Close()
-
-	log.Debug().Msgf("ID: %d Name: %s", u.ID, u.Name)
 
 	conn, _, _, err := ws.UpgradeHTTP(c.Request, c.Writer)
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/narslan/uci"
+	"github.com/narslan/gochess/uci"
 )
 
 type EngineInfo struct {
@@ -69,7 +69,7 @@ func (e *EngineInfo) Validate() error {
 	if err != nil {
 		return err
 	}
-	options, err := eng.Options()
+	options, err := eng.CommandUCI()
 	if err != nil {
 		return err
 	}

@@ -3,18 +3,16 @@ package commands
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"log"
+	"os"
 	"os/signal"
 	"syscall"
-
-	"os"
 
 	"github.com/narslan/dezge/http"
 	"github.com/narslan/dezge/inmem"
 	"github.com/narslan/dezge/sqlite"
 	"github.com/pelletier/go-toml"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+
 	"github.com/spf13/cobra"
 )
 
@@ -26,9 +24,9 @@ var (
 
 			config, err := ReadConfigFile(cfgFile)
 			if os.IsNotExist(err) {
-				log.Fatal().Msgf("config file not found: %s", cfgFile)
+				log.Fatalf("config file not found: %s", cfgFile)
 			}
-			log.Debug().Msgf("Config: %v", config)
+			//log.Debug().Msgf("Config: %v", config)
 
 			m := NewMain(config)
 
@@ -41,13 +39,13 @@ var (
 			ctx.Deadline()
 
 			go func() {
-				oscall := <-c
-				log.Info().Msgf("system call:%+v", oscall)
+				<-c
+				//	log.Info().Msgf("system call:%+v", oscall)
 				cancel()
 			}()
 
 			if err := m.Run(ctx); err != nil {
-				log.Fatal().Msgf(err.Error())
+				log.Fatal(err.Error())
 			}
 		},
 	}
@@ -85,23 +83,25 @@ func DefaultConfig() Config {
 // ReadConfigFile unmarshals config from config file.
 func ReadConfigFile(filename string) (Config, error) {
 	config := DefaultConfig()
-	if buf, err := ioutil.ReadFile(filename); err != nil {
+	buf, err := os.ReadFile(filename)
+	if err != nil {
 		return config, err
-	} else if err := toml.Unmarshal(buf, &config); err != nil {
+	}
+
+	if err := toml.Unmarshal(buf, &config); err != nil {
 		return config, err
 	}
 	return config, nil
 }
 
 func init() {
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file")
 	cobra.OnInitialize(checkConfigFile)
 }
 
 func checkConfigFile() {
 	if cfgFile == "" {
-		log.Fatal().Msg("no config supplied")
+		log.Fatal("no config supplied")
 	}
 
 }
@@ -126,7 +126,7 @@ func (m *Main) Run(ctx context.Context) error {
 	m.HTTPServer.Cert = m.Config.HTTP.Cert
 	m.HTTPServer.Key = m.Config.HTTP.Key
 
-	log.Debug().Msgf("%+v", m.Config)
+	//log.Debug().Msgf("%+v", m.Config)
 	db := sqlite.NewDB(m.Config.DB.DSN)
 	err := db.Open()
 	if err != nil {

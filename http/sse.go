@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
 )
 
 type EventData struct {
@@ -29,7 +28,7 @@ func (s *Server) timeStream(c *gin.Context) {
 			for {
 				select {
 				case <-cCp.Done():
-					log.Debug().Msgf("%s", "context done")
+
 					return
 				case t := <-ticker.C:
 					tch <- t
