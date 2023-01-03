@@ -12,7 +12,7 @@ type GamesDB struct {
 	*kivik.DB
 }
 
-func NewDB(ctx context.Context, client *kivik.Client) (*GamesDB, error) {
+func NewGamesDB(ctx context.Context, client *kivik.Client) (*GamesDB, error) {
 
 	db := client.DB(context.TODO(), "games")
 
