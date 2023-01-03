@@ -28,9 +28,6 @@ type DB struct {
 	// Datasource name.
 	DSN string
 
-	// Destination for events to be published.
-	//EventService wtf.EventService
-
 	// Returns the current time. Defaults to time.Now().
 	// Can be mocked for tests.
 	Now func() time.Time
