@@ -3,10 +3,11 @@ package dezge
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
-	"github.com/narslan/gochess/uci"
+	"github.com/narslan/chess/engine/uci"
 )
 
 type EngineInfo struct {
@@ -65,19 +66,17 @@ func (e *EngineInfo) Validate() error {
 	if err != nil {
 		return err
 	}
-	eng, err := uci.NewEngine(e.Path)
+	var logger *log.Logger
+	eng, err := uci.Run(e.Path, nil, logger)
 	if err != nil {
 		return err
 	}
-	options, err := eng.CommandUCI()
-	if err != nil {
-		return err
-	}
+	defer eng.Quit()
 
-	for k, v := range options {
-		e.Options[k] = v
+	for k, v := range eng.Options() {
+		e.Options[k] = v.String()
 	}
-	id, ok := options["id"]
+	id, ok := e.Options["id"]
 	if !ok {
 		return fmt.Errorf("engine id is not found")
 	}

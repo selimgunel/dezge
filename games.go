@@ -2,15 +2,11 @@ package dezge
 
 import (
 	"context"
-	"strings"
-
-	"github.com/narslan/gochess/pgn"
 )
 
 type PGN struct {
-	ID    string
-	Tags  map[string]string // Tags
-	Moves []string
+	ID   string
+	Tags map[string]string
 }
 
 type PGNService interface {
@@ -23,14 +19,14 @@ type PGNService interface {
 
 func NewPGN(pgnSource string) *PGN {
 
-	moves, tags := pgn.Parse(pgnSource)
-	tagsMap := make(map[string]string)
-	for _, v := range tags {
-		chunks := strings.Split(v, " ")
-		tagsMap[chunks[0]] = chunks[1]
-	}
-	return &PGN{Moves: moves, Tags: tagsMap}
-
+	// moves, tags := pgn.N(pgnSource)
+	// tagsMap := make(map[string]string)
+	// for _, v := range tags {
+	// 	chunks := strings.Split(v, " ")
+	// 	tagsMap[chunks[0]] = chunks[1]
+	// }
+	// return &PGN{Moves: moves, Tags: tagsMap}
+	return nil
 }
 
 type PGNFilter struct {
